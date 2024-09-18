@@ -32,6 +32,4 @@ python test in wsl ubuntu 20.04
     "python.terminal.activateEnvInCurrentTerminal": true
 
 ## install some package
-    pip install pymemcache redis sqlalchemy
-    sudo apt install libmysqlclient-dev
-    pip install mysql mysql-connector-python
+    pip install pymemcache redis sqlalchemy mysql-connector-python

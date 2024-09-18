@@ -3,7 +3,8 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.automap import automap_base
 
 # 資料庫連線資訊
-uri = 'mysql+mysqlconnector://root:******@localhost/mini_main'  # 資料庫URI
+# uri = 'mysql+mysqlconnector://root:******@localhost/mini_main'  # 資料庫URI
+uri = 'mysql+mysqlconnector://ewaytech:ewaytech2020@localhost/pmc_main'  # 資料庫URI
 db = create_engine(uri, echo=False)  # 建立資料庫引擎，echo=False表示不輸出SQL語句
 conn = sessionmaker(db)()  # 建立會話，用於與資料庫互動
 
@@ -13,7 +14,7 @@ Base.prepare(db, reflect=True)  # 反射資料庫，獲取表結構並映射到�
 Base.classes.keys()  # 獲取所有的物件名稱，方便後續使用
 
 # 獲取表物件
-ads = Base.classes.ads  # 獲取ads表物件
+# ads = Base.classes.ads  # 獲取ads表物件
 admin = Base.classes.admin  # 獲取admin表物件
 document = Base.classes.document  # 獲取document表物件
 
@@ -35,8 +36,9 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker, backref
 
 # 建立資料庫引擎
-engine = create_engine('mysql://root@localhost/test?charset=utf8')  # 連接到MySQL資料庫
-Base = declarative_base(engine)  # 建立聲明基礎類
+# engine = create_engine('mysql://root@localhost/test?charset=utf8')  # 連接到MySQL資料庫
+engine = create_engine('mysql+mysqlconnector://ewaytech:ewaytech2020@localhost/test?charset=utf8mb4')  # 連接到MySQL資料庫
+Base = declarative_base()  # 建立聲明基礎類
 session = sessionmaker(engine)()  # 建立會話
 
 # 定義User類，映射到user表
@@ -60,7 +62,7 @@ class Course(Base):
         return '<Course: {}>'.format(self.name)  # 返回課程的字串表示
 
 # 建立資料庫表，添加測試資料
-Base.metadata.create_all()  # 建立所有表
+Base.metadata.create_all(bind=engine)  # 建立所有表
 u1 = User(name='Kobe')  # 建立使用者Kobe
 u2 = User(name='Nash')  # 建立使用者Nash
 u3 = User(name='James')  # 建立使用者James
