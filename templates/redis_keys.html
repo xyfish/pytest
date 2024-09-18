@@ -4,6 +4,35 @@
     <title>Redis Keys</title>
     <link rel="stylesheet" href="/static/style.css">
     <script>
+        // 使用 JavaScript 發送 POST 請求來創建或更新 key
+        function createOrUpdateKey() {
+            const key = document.getElementById('key').value;
+            const value = document.getElementById('value').value;
+
+            if (!key || !value) {
+                alert("Key 和 Value 都不能為空！");
+                return;
+            }
+
+            fetch('/redis-keys/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    'key': key,
+                    'value': value,
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                window.location.reload();  // 重新加載頁面來更新鍵值列表
+            })
+            .catch(error => {
+                alert("Error: " + error);
+            });
+        }
         // 使用 JavaScript 來發送 DELETE 請求
         function deleteKey(key) {
             fetch(`/redis-keys/${key}`, {
@@ -24,7 +53,7 @@
     <h1>Redis Keys</h1>
 
     <h2>Create or Update Key</h2>
-    <form action="/redis-keys/" method="post" target="_blank">
+    <form onsubmit="event.preventDefault(); createOrUpdateKey();">
         <label for="key">Key:</label>
         <input type="text" id="key" name="key" required>
         <label for="value">Value:</label>
