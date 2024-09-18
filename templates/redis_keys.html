@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Redis Keys</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>Redis Keys</h1>
+
+    <h2>Create or Update Key</h2>
+    <form action="/redis-keys/" method="post" target="_blank">
+        <label for="key">Key:</label>
+        <input type="text" id="key" name="key" required>
+        <label for="value">Value:</label>
+        <input type="text" id="value" name="value" required>
+        <button type="submit">Submit</button>
+    </form>
+
+    <h2>All Keys</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Key</th>
+                <th>Value</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for key, value in key_values.items() %}
+            <tr>
+                <td>{{ key }}</td>
+                <td>{{ value }}</td>
+                <td>
+                    <form action="/redis-keys/{{ key }}" method="post" style="display: inline;"  target="_blank">
+                        <button type="submit" formmethod="delete">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
