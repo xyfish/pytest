@@ -1,5 +1,5 @@
 # pytest
-python test
+python test in wsl ubuntu 20.04
 
 ## manage python version with [pyenv](https://github.com/pyenv/pyenv)
 
@@ -12,6 +12,12 @@ python test
 
     curl https://pyenv.run | bash
 
+## add to ~/.bashrc
+
+    export PYENV_ROOT="$HOME/.pyenv"
+    [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+    eval "$(pyenv init -)"
+
 ## intall python 3.12.6 & set to global
 
     pyenv install 3.12.6
@@ -20,3 +26,12 @@ python test
 ## set venv
 
     python -m venv venv
+
+## auto load venv (edit .vscode/settings.json)
+
+    "python.terminal.activateEnvInCurrentTerminal": true
+
+## install some package
+    pip install pymemcache redis sqlalchemy
+    sudo apt install libmysqlclient-dev
+    pip install mysql mysql-connector-python
