@@ -3,6 +3,22 @@
 <head>
     <title>Redis Keys</title>
     <link rel="stylesheet" href="/static/style.css">
+    <script>
+        // 使用 JavaScript 來發送 DELETE 請求
+        function deleteKey(key) {
+            fetch(`/redis-keys/${key}`, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert(`Key '${key}' deleted.`);
+                    window.location.reload(); // 重新加載頁面來更新鍵列表
+                } else {
+                    alert(`Failed to delete key '${key}'.`);
+                }
+            });
+        }
+    </script>
 </head>
 <body>
     <h1>Redis Keys</h1>
@@ -31,9 +47,7 @@
                 <td>{{ key }}</td>
                 <td>{{ value }}</td>
                 <td>
-                    <form action="/redis-keys/{{ key }}" method="post" style="display: inline;"  target="_blank">
-                        <button type="submit" formmethod="delete">Delete</button>
-                    </form>
+                    <button onclick="deleteKey('{{ key }}')">Delete</button>
                 </td>
             </tr>
             {% endfor %}
