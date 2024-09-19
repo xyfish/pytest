@@ -42,6 +42,8 @@ pip install fastapi uvicorn jinja2
 # Successfully installed MarkupSafe-2.1.5 annotated-types-0.7.0 anyio-4.4.0 click-8.1.7 fastapi-0.115.0 h11-0.14.0 idna-3.10 jinja2-3.1.4 pydantic-2.9.2 pydantic-core-2.23.4 sniffio-1.3.1 starlette-0.38.5 uvicorn-0.30.6
 pip install python-multipart
 # Successfully installed python-multipart-0.0.9
+pip install pydantic[email]
+# Successfully installed dnspython-2.6.1 email-validator-2.2.0
 ```
 
 ## 使用 uvicorn 來啟動 FastAPI 應用

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management</title>
+    <!-- 引入Bootstrap來美化頁面 -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">User Management</h1>
+
+        <!-- 用戶列表 -->
+        <div class="mt-5">
+            <h2>All Users</h2>
+            <ul id="user-list" class="list-group">
+                <!-- 用戶將動態插入到這裡 -->
+            </ul>
+        </div>
+
+        <!-- 創建用戶表單 -->
+        <div class="mt-5">
+            <h2>Create New User</h2>
+            <form id="create-user-form">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Create User</button>
+            </form>
+        </div>
+
+        <!-- 更新用戶表單 -->
+        <div class="mt-5" id="update-section" style="display: none;">
+            <h2>Update User</h2>
+            <form id="update-user-form" >
+                <div class="form-group">
+                    <label for="update-name">New Name</label>
+                    <input type="text" id="update-name" class="form-control" required>
+                </div>
+                <input type="hidden" id="update-user-id">
+                <button type="submit" class="btn btn-warning">Update User</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 引入jQuery和Bootstrap JS（可選） -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- 自定義腳本 -->
+    <script>
+        const apiBaseUrl = 'http://127.0.0.1:8000/users';  // API 基本URL
+
+        // 加載所有用戶
+        function loadUsers() {
+            fetch(apiBaseUrl, {
+                "sec-fetch-mode": "cors",
+                "sec-fetch-site": "same-origin"
+            })
+                .then(response => response.json())
+                .then(data => {
+                    const userList = document.getElementById('user-list');
+                    userList.innerHTML = '';
+                    data.forEach(user => {
+                        const userItem = document.createElement('li');
+                        userItem.classList.add('list-group-item');
+                        userItem.innerHTML = `
+                            <strong>${user.name}</strong> (${user.email})
+                            <button class="btn btn-danger btn-sm float-right ml-2" onclick="deleteUser(${user.id})">Delete</button>
+                            <button class="btn btn-warning btn-sm float-right" onclick="showUpdateForm(${user.id}, '${user.name}')">Update</button>
+                        `;
+                        userList.appendChild(userItem);
+                    });
+                })
+                .catch(error => console.error('Error loading users:', error));
+        }
+
+        // 創建用戶
+        document.getElementById('create-user-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            fetch(apiBaseUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name, email, password })
+            })
+            .then(response => response.json())
+            .then(() => {
+                loadUsers();
+                this.reset();
+            })
+            .catch(error => console.error('Error creating user:', error));
+        });
+
+        // 刪除用戶
+        function deleteUser(userId) {
+            fetch(`${apiBaseUrl}/${userId}`, {
+                method: 'DELETE'
+            })
+            .then(() => loadUsers())
+            .catch(error => console.error('Error deleting user:', error));
+        }
+
+        // 顯示更新用戶表單
+        function showUpdateForm(userId, userName) {
+            document.getElementById('update-user-id').value = userId;
+            document.getElementById('update-name').value = userName;
+            document.getElementById('update-section').style.display = 'block';
+        }
+
+        // 更新用戶
+        document.getElementById('update-user-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const userId = document.getElementById('update-user-id').value;
+            const name = document.getElementById('update-name').value;
+
+            fetch(`${apiBaseUrl}/${userId}?`+$.param({name:name}), {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name })
+            })
+            .then(() => {
+                loadUsers();
+                document.getElementById('update-section').style.display = 'none';
+            })
+            .catch(error => console.error('Error updating user:', error));
+        });
+
+        // 初始化加載用戶列表
+        loadUsers();
+    </script>
+</body>
+</html>
