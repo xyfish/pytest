@@ -31,10 +31,6 @@ pyenv global 3.12.6
 python -m venv venv
 ```
 
-## auto load venv (edit .vscode/settings.json)
-```json
-"python.terminal.activateEnvInCurrentTerminal": true
-```
 ## install some package
 ```bash
 pip install pymemcache redis sqlalchemy mysql-connector-python
