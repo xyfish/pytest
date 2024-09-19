@@ -47,4 +47,6 @@ pip install python-multipart
 ## 使用 uvicorn 來啟動 FastAPI 應用
 ```bash
 uvicorn your_script_name:app --reload
+# example
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
